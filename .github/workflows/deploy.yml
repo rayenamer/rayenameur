@@ -17,6 +17,9 @@ concurrency:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: cv
     environment:
       name: github-pages
       url: ${{ steps.deployment.outputs.page_url }}
@@ -26,11 +29,12 @@ jobs:
         with:
           node-version: 20
           cache: npm
+          cache-dependency-path: cv/package-lock.json
       - run: npm ci
       - run: npm run build
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:
-          path: dist
+          path: cv/dist
       - id: deployment
         uses: actions/deploy-pages@v4
